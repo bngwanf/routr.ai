@@ -1,0 +1,210 @@
+{% extends 'includes/base.html' %}
+
+{% load crispy_forms_field %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+    <div class="container">
+        <style>
+            .autocomplete-suggestions {
+                border: 1px solid #ddd;
+                max-height: 150px;
+                overflow-y: auto;
+                position: absolute;
+                background-color: white;
+                z-index: 1000;
+            }
+
+            .autocomplete-suggestion {
+                padding: 8px;
+                cursor: pointer;
+            }
+
+            .autocomplete-suggestion:hover {
+                background-color: #f0f0f0;
+            }
+        </style>
+        <form method="post">
+            <h1>Driver Trip Record</h1>
+            {% csrf_token %}
+
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+
+                    <td>{{ form.date|as_crispy_field }}</td>
+                    <td>{{ form.company_name|as_crispy_field }}</td>
+                    <td>{{ form.company_address|as_crispy_field }}</td>
+                    <td>{{ form.driver_name|as_crispy_field }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+
+                    <td>{{ form.manifest|as_crispy_field }}</td>
+                    <td>{{ form.truck_no|as_crispy_field }}</td>
+                    <td>{{ form.trailer_no|as_crispy_field }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="table table-bordered">
+                <tr>
+                    <td>{{ form.start_time|as_crispy_field }}</td>
+                    <td>{{ form.end_time|as_crispy_field }}</td>
+                </tr>
+            </table>
+            <table class="table table-bordered">
+                <tr>
+
+                    <td>{{ form.starting_mileage|as_crispy_field }}</td>
+                    <td>{{ form.ending_mileage|as_crispy_field }}</td>
+
+
+                </tr>
+            </table>
+            <table class="table table-bordered">
+                <tr>
+
+                    <td>
+
+                        {{ form.starting_location|as_crispy_field }}
+                        <div id="starting-location-suggestions" class="autocomplete-suggestions"></div>
+                    </td>
+                    <td>
+                        {{ form.ending_location|as_crispy_field }}
+                        <div id="ending-location-suggestions" class="autocomplete-suggestions"></div>
+                    </td>
+                </tr>
+            </table>
+
+
+            </tbody>
+            </table>
+
+            {{ formset.management_form }}
+
+            <h2>Stops</h2>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Customer Name</th>
+                    <th>Customer Address</th>
+                    <th>Pallets In</th>
+                    <th>Pallets Out</th>
+                    <th>Comments</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody id="formset-container">
+                {% for stop_form in formset %}
+                    
+
+                    <tr class="formset-row">
+                        {{ stop_form.id }}
+                        <td>{{ stop_form.customer_name|as_crispy_field }}</td>
+                        <td>{{ stop_form.customer_address|as_crispy_field }}</td>
+                        <td>{{ stop_form.pallets_in|as_crispy_field }}</td>
+                        <td>{{ stop_form.pallets_out|as_crispy_field }}</td>
+                        <td>{{ stop_form.comments|as_crispy_field }}</td>
+                        <td>
+                            <button type="button" class="btn btn-danger remove-form">Remove</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <button type="button" id="add-stop" class="btn btn-success">Add Stop</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const addFormButton = document.getElementById('add-stop');
+            const formsetContainer = document.getElementById('formset-container');
+            let totalForms = parseInt(document.getElementById('id_stops-TOTAL_FORMS').value);
+
+            console.log('addFormButton:', addFormButton);
+            console.log('formsetContainer:', formsetContainer);
+
+
+            addFormButton.addEventListener('click', function (e) {
+                console.log('addFormButton')
+                e.preventDefault();
+                const newFormRow = formsetContainer.firstElementChild.cloneNode(true);
+                totalForms++;
+                document.getElementById('id_stops-TOTAL_FORMS').value = totalForms;
+                newFormRow.querySelectorAll('input, select, textarea').forEach(input => {
+                    input.name = input.name.replace(/-\d+-/, `-${totalForms - 1}-`);
+                    input.id = input.id.replace(/_\d+_/, `_${totalForms - 1}_`);
+                    console.log("123")
+                    if (input.type !== 'hidden') {
+                        input.value = '';
+                    }
+                });
+                formsetContainer.appendChild(newFormRow);
+                newFormRow.querySelector('.remove-form').addEventListener('click', removeForm);
+            });
+
+            document.querySelectorAll('.remove-form').forEach(button => {
+                button.addEventListener('click', removeForm);
+            });
+
+            function removeForm(e) {
+                e.preventDefault();
+                if (totalForms > 1) {
+                    e.target.closest('.formset-row').remove();
+                    totalForms--;
+                    document.getElementById('id_stops-TOTAL_FORMS').value = totalForms;
+                }
+            }
+        });
+
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            function setupAutocomplete(inputId, suggestionsContainerId) {
+                const input = document.getElementById(inputId);
+                const suggestionsContainer = document.getElementById(suggestionsContainerId);
+
+                input.addEventListener('input', function () {
+                    const query = input.value.trim();
+                    if (query.length < 1) {
+                        suggestionsContainer.innerHTML = '';
+                        return;
+                    }
+
+                    fetch(`{% url 'Routr:get_unique_locations' %}?q=${encodeURIComponent(query)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            suggestionsContainer.innerHTML = '';
+                            data.locations.forEach(location => {
+                                const suggestion = document.createElement('div');
+                                suggestion.classList.add('autocomplete-suggestion');
+                                suggestion.textContent = location;
+                                suggestion.addEventListener('click', function () {
+                                    input.value = location;
+                                    suggestionsContainer.innerHTML = '';
+                                });
+                                suggestionsContainer.appendChild(suggestion);
+                            });
+                        });
+                });
+
+                document.addEventListener('click', function (e) {
+                    if (!input.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+                        suggestionsContainer.innerHTML = '';
+                    }
+                });
+            }
+
+            setupAutocomplete('id_starting_location', 'starting-location-suggestions');
+            setupAutocomplete('id_ending_location', 'ending-location-suggestions');
+
+            // Add the existing JavaScript for dynamic formset management
+        });
+    </script>
+{% endblock %}

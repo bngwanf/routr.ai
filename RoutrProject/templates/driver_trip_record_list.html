@@ -1,0 +1,123 @@
+{% extends 'includes/base.html' %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Driver Trip Records</h1>
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+            <tr>
+                <th>Report</th>
+                <th>Date</th>
+                <th>Company Name</th>
+                <th>Driver Name</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Starting Mileage</th>
+                <th>Ending Mileage</th>
+                <th>Starting Location</th>
+                <th>Ending Location</th>
+                <th>Edit</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for record in driver_trip_records %}
+                <tr>
+                    <td><a href="{% url 'Routr:report' record.id %}" class="btn btn-sm btn-primary">Report</a></td>
+                    <td>{{ record.date }}</td>
+                    <td>{{ record.company_name }}</td>
+                    <td>{{ record.driver_name }}</td>
+                    <td>{{ record.start_time }}</td>
+                    <td>{{ record.end_time }}</td>
+                    <td>{{ record.starting_mileage }}</td>
+                    <td>{{ record.ending_mileage }}</td>
+                    <td>{{ record.starting_location }}</td>
+                    <td>{{ record.ending_location }}</td>
+                    <td>
+                        <a href="{% url 'Routr:edit_driver_trip_record' record.id %}" class="btn btn-sm btn-primary">Edit</a>
+                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ record.id }}">
+                            Delete
+                        </button>
+                    </td>
+
+                </tr>
+                <div class="modal fade" id="deleteModal{{ record.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ record.id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel{{ record.id }}">Confirm Deletion</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete this record?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <a href="{% url 'Routr:delete_driver_trip_record' record.id %}" class="btn btn-danger">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if driver_trip_records.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1" aria-label="First">
+                            <span aria-hidden="true">&laquo; First</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ driver_trip_records.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">Previous</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" aria-label="First">
+                            <span aria-hidden="true">&laquo; First</span>
+                        </a>
+                    </li>
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">Previous</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">
+                        Page {{ driver_trip_records.number }} of {{ driver_trip_records.paginator.num_pages }}
+                    </a>
+                </li>
+
+                {% if driver_trip_records.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ driver_trip_records.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">Next</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ driver_trip_records.paginator.num_pages }}" aria-label="Last">
+                            <span aria-hidden="true">Last &raquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">Next</span>
+                        </a>
+                    </li>
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" aria-label="Last">
+                            <span aria-hidden="true">Last &raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+{% endblock %}

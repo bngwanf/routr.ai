@@ -1,0 +1,159 @@
+{% extends 'includes/base.html' %}
+
+{% block body %}
+    <style>
+        html {
+            font-size: 80%;
+
+        }
+
+        body {
+            font-family: 'Old Standard TT', serif;
+            font-size: 90%;
+
+        }
+        .editable {
+            border: 1px solid #ccc;
+            padding: 5px;
+        }
+    </style>
+    <div class="container">
+        <div class="col-md" style="width: max-content">
+            <button id="printButton" class="btn btn-primary" onclick="downloadPDF()">Export PDF</button>
+            <br>
+            <div id="print" class="card card-outline card-success">
+                <div class="card-header">
+                    <h2 class="card-title">Driver's Trip Record</h2>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                            <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                            <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                        </button>
+                    </div> <!-- /.card-tools -->
+                </div> <!-- /.card-header -->
+                <div class="card-body">
+                    <table class="table table-bordered table-responsive">
+
+                        <tr>
+                            <th><h5 style="font-weight: bolder; place-content: center; text-align: center">Company name</h5></th>
+                            <td><h5>{{ trip.company_name }}</h5></td>
+                            <th><h5>Date</h5></th>
+                            <td><h5>{{ trip.date }}</h5></td>
+                            <th><h5>Manifest#</h5></th>
+                            <td><h5>{{ trip.manifest }}</h5></td>
+                        </tr>
+                        <tr>
+
+                            <th><h5>Driver Name:</h5></th>
+                            <td><h5>{{ trip.driver_name }}</h5></td>
+                            <th><h5>Truck No#</h5></th>
+                            <td><h5>{{ trip.truck_no }}</h5></td>
+                            <th><h5>Trailer#</h5></th>
+                            <td><h5>{{ trip.trailer_no }}</h5></td>
+                        </tr>
+                        <tr>
+                            <th colspan="2"><h5>Start Mileage:</h5></th>
+                            <td><h5>{{ trip.starting_mileage }}</h5></td>
+                            <th colspan="2"><h5>End Mileage</h5></th>
+                            <td><h5>{{ trip.ending_mileage }}</h5></td>
+
+                        </tr>
+                    </table>
+                    <table class="table table-bordered table-responsive">
+                        <tr>
+
+                            <td colspan="3"><h4>{{ trip.company_address }}</h4></td>
+                            <td colspan="2" style="color: white">
+                                <h4 id="tripRecord" onclick="makeEditable(event)">Drivers Trip Record</h4>
+                            </td>
+                        </tr>
+                    </table>
+                    <br>
+                    <table class="table table-bordered table-responsive">
+                        <thead class="">
+                        <tr>
+                            <th>Customer</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Pallets out</th>
+                            <th>Pallets in</th>
+                            <th>Time in</th>
+                            <th>Time out</th>
+                            <th>Mileage</th>
+                            <th>Routes Travelled</th>
+                            <th>Comments</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in stops.journey %}
+                            <tr>
+                                <td>{{ i.customer_name }}</td>
+                                <td>{{ i.city }}</td>
+                                <td>{{ i.state }}</td>
+                                <td>{{ i.pallets_out }}</td>
+                                <td>{{ i.pallets_in }}</td>
+                                <td>{{ i.time_in }}</td>
+                                <td>{{ i.time_out }}</td>
+                                <td>{{ i.mileage }}</td>
+                                <td>{{ i.start_route }} / {{ i.end_route }}</td>
+                                <td>{{ i.comments }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% for i in stops.routes %}
+                        <h1>Route name: {{ i.route_name }}</h1>
+                        <ul>
+                            {% for r in i.route %}
+                                <li>{{ r }}</li>
+                            {% endfor %}
+                        </ul>
+                        <h2>Distance: {{ i.distance }}</h2>
+                        <h2>Cummulative mileage: {{ i.cummulative_milegae }}</h2>
+                    {% endfor %}
+
+                </div> <!-- /.card-body -->
+            </div> <!-- /.card -->
+        </div>
+
+    </div>
+    <script>
+        let currentEditableElement = null;
+
+        function makeEditable(event) {
+            if (currentEditableElement !== null) {
+                saveContent();
+            }
+
+            let element = event.target;
+
+            if (element.tagName === 'H4') {
+                let input = document.createElement('input');
+                input.type = 'text';
+                input.value = element.innerText;
+                input.className = 'editable';
+                input.onblur = saveContent;
+                element.replaceWith(input);
+                input.focus();
+                currentEditableElement = input;
+            }
+        }
+
+        function saveContent() {
+            if (currentEditableElement) {
+                let h4 = document.createElement('h4');
+                h4.id = 'tripRecord';
+                h4.innerText = currentEditableElement.value;
+                h4.onclick = makeEditable;
+                currentEditableElement.replaceWith(h4);
+                currentEditableElement = null;
+            }
+        }
+
+        document.addEventListener('click', function(event) {
+            if (currentEditableElement && !currentEditableElement.contains(event.target)) {
+                saveContent();
+            }
+        });
+    </script>
+{% endblock %}
