@@ -1,8 +1,8 @@
-# 🖥  Routr.ai
+# 🖥  [Routr.ai](https://routr.ai)
 
 
 ## Project Overview
-RoutrProject is a Django-based web application designed to manage trip data, fuel purchase records, and other logistic tasks for truck drivers. It integrates GPT-4 for advanced functionality such as trip report generation based on user inputs.
+[Routr.ai](https://routr.ai) is a Django-based web application designed to manage trip data, fuel purchase records, and other logistic tasks for truck drivers. It integrates GPT-4 for advanced functionality such as trip report generation based on user inputs.
 
 
 ## Project Structure
