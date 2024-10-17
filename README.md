@@ -29,7 +29,7 @@ The project consists of multiple modules and configurations to handle server ope
 
 
 
-## 🌐 Django: Framework Overview
+## 🌐  Django: Framework Overview
 
 
 ### Django Functionality
@@ -69,7 +69,7 @@ Nginx serves as a high-performance HTTP server, reverse proxy, and load balancer
 
 
 
-## 🐍 Gunicorn: Python Application Server
+## 🐍  Gunicorn: Python Application Server
 
 
 ### Gunicorn Overview
@@ -84,7 +84,7 @@ Gunicorn (“Green Unicorn”) is a WSGI-compatible server for Python.
 
 
 
-## 🚀 Deployment on DigitalOcean Ubuntu 22.04
+## 🚀  Deployment on DigitalOcean Ubuntu 22.04
 
 
 ### Server Setup
@@ -103,7 +103,7 @@ Gunicorn (“Green Unicorn”) is a WSGI-compatible server for Python.
 
 
 
-## 🧠 GPT Integration (GPT-4 API Calls)
+## 🧠  GPT Integration (GPT-4 API Calls)
 
 
 ### GPT-4 Utility (gpt_utils.py)
@@ -119,7 +119,7 @@ Gunicorn (“Green Unicorn”) is a WSGI-compatible server for Python.
 4. **Render Data**: Send data to templates to display route information.
 
 
-## 📄 RoutrApp Views and URL Mapping
+## 📄  RoutrApp Views and URL Mapping
 
 
 ### Views Overview (views.py)
@@ -135,7 +135,7 @@ Gunicorn (“Green Unicorn”) is a WSGI-compatible server for Python.
 - `/report/<trip_id>/`: Generate report with GPT-4 details for a specific trip.
 
 
-## 📝 Models: Data Representation
+## 📝  Models: Data Representation
 
 
 ### DriverTripRecord Model
@@ -152,7 +152,7 @@ Gunicorn (“Green Unicorn”) is a WSGI-compatible server for Python.
 
 
 
-## 📊 Forms for Data Input (forms.py)
+## 📊  Forms for Data Input (forms.py)
 
 
 ### DriverTripRecordForm
@@ -165,7 +165,7 @@ Gunicorn (“Green Unicorn”) is a WSGI-compatible server for Python.
 
 
 
-## 💻 Testing and Debugging
+## 💻  Testing and Debugging
 
 
 ### Testing Suite (tests.py)
@@ -175,7 +175,7 @@ Gunicorn (“Green Unicorn”) is a WSGI-compatible server for Python.
 
 
 
-## 🔒 Security Considerations
+## 🔒  Security Considerations
 
 ### Key Security Features
 1. **API Key Management**: Store sensitive keys securely using environment variables.
@@ -183,7 +183,7 @@ Gunicorn (“Green Unicorn”) is a WSGI-compatible server for Python.
 3. **Authentication**: CustomUser model with email-based login for added security.
 
 
-## Summary and Key Takeaways
+## 🏁  Summary and Key Takeaways
 
 
 ### Summary
