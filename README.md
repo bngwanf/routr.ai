@@ -1,10 +1,13 @@
 # 🖥 Routr.ai
 
+
 ## Project Overview
 RoutrProject is a Django-based web application designed to manage trip data, fuel purchase records, and other logistic tasks for truck drivers. It integrates GPT-4 for advanced functionality such as trip report generation based on user inputs.
 
+
 ## Project Structure
 The project consists of multiple modules and configurations to handle server operations, API integrations, and application logic. Below is a breakdown of the key components:
+
 
 ### Main Files and Directories
 - `manage.py`: Django’s administrative utility to run the application, manage databases, and handle server operations.
@@ -24,7 +27,10 @@ The project consists of multiple modules and configurations to handle server ope
   - `migrations/`: Directory storing Django migrations files for database schema evolution.
 - `requirements.txt`: List of dependencies required to run the project.
 
+
+
 ## 🌐 Django: Framework Overview
+
 
 ### Django Functionality
 Django is an MVC-based web framework providing tools to build robust applications.
@@ -45,7 +51,9 @@ Django is an MVC-based web framework providing tools to build robust application
 - **DATABASES**: Configuration of the database (SQLite in this case).
 - **STATIC_URL and STATIC_ROOT**: Manages static files for deployment.
 
+
 ## ⚙ Nginx: Reverse Proxy and Load Balancer
+
 
 ### Nginx Overview
 Nginx serves as a high-performance HTTP server, reverse proxy, and load balancer.
@@ -53,12 +61,16 @@ Nginx serves as a high-performance HTTP server, reverse proxy, and load balancer
 - **Load Balancing**: Distributes incoming traffic to prevent bottlenecks.
 - **Static Files**: Efficiently serves static files, reducing load on Django.
 
+
 ### Nginx Configuration
 1. **Install Nginx**: `sudo apt install nginx`.
 2. **Config File**: Located in `/etc/nginx/sites-available/yourproject`. Point `server_name` to your domain or IP and proxy requests to Gunicorn (`proxy_pass http://127.0.0.1:8000;`).
 3. **SSL Configuration**: Use certbot for SSL certificates (required for HTTPS).
 
+
+
 ## 🐍 Gunicorn: Python Application Server
+
 
 ### Gunicorn Overview
 Gunicorn (“Green Unicorn”) is a WSGI-compatible server for Python.
@@ -70,7 +82,10 @@ Gunicorn (“Green Unicorn”) is a WSGI-compatible server for Python.
 2. **Run Gunicorn**: Start with `gunicorn --workers 3 RoutrProject.wsgi:application`.
 3. **Systemd Service**: Create a systemd service file (`/etc/systemd/system/yourproject.service`) and configure Gunicorn to start automatically and restart on failure.
 
+
+
 ## 🚀 Deployment on DigitalOcean Ubuntu 22.04
+
 
 ### Server Setup
 1. **Create Droplet**: Select Ubuntu 22.04 on DigitalOcean.
@@ -86,7 +101,10 @@ Gunicorn (“Green Unicorn”) is a WSGI-compatible server for Python.
 1. **Setup Gunicorn**: Configure Gunicorn as a system service and start it on boot.
 2. **Setup Nginx**: Configure Nginx to reverse-proxy requests to Gunicorn and use SSL for secure connections (`sudo certbot --nginx` for HTTPS setup).
 
+
+
 ## 🧠 GPT Integration (GPT-4 API Calls)
+
 
 ### GPT-4 Utility (gpt_utils.py)
 - **Purpose**: Encapsulates interactions with the GPT-4 model for journey data.
@@ -100,7 +118,9 @@ Gunicorn (“Green Unicorn”) is a WSGI-compatible server for Python.
 3. **Parse Response**: Parse JSON to populate the journey and route data.
 4. **Render Data**: Send data to templates to display route information.
 
+
 ## 📄 RoutrApp Views and URL Mapping
+
 
 ### Views Overview (views.py)
 - **Index**: Renders the main page.
@@ -114,7 +134,9 @@ Gunicorn (“Green Unicorn”) is a WSGI-compatible server for Python.
 - `/fuel_purchase_form/`: Fuel purchase record form.
 - `/report/<trip_id>/`: Generate report with GPT-4 details for a specific trip.
 
+
 ## 📝 Models: Data Representation
+
 
 ### DriverTripRecord Model
 - **Attributes**: Date, company, driver name, start/end location, mileage, etc.
@@ -128,7 +150,10 @@ Gunicorn (“Green Unicorn”) is a WSGI-compatible server for Python.
 - **Attributes**: Customer name, address, pallets in/out, comments.
 - **Functionality**: Tracks each stop within a trip and links back to DriverTripRecord.
 
+
+
 ## 📊 Forms for Data Input (forms.py)
+
 
 ### DriverTripRecordForm
 - **Fields**: Date, company, mileage, start/end time.
@@ -138,12 +163,17 @@ Gunicorn (“Green Unicorn”) is a WSGI-compatible server for Python.
 - **Fields**: State, gallons, dollar amount, invoice number.
 - **Validation**: Checks gallons and dollar amount are positive.
 
+
+
 ## 💻 Testing and Debugging
+
 
 ### Testing Suite (tests.py)
 - **Framework**: Django’s `TestCase` for unit tests.
 - **Scope**: Test model validation, views, and integration points with GPT API.
 - **Goal**: Ensure data integrity and correct API responses.
+
+
 
 ## 🔒 Security Considerations
 
@@ -152,10 +182,13 @@ Gunicorn (“Green Unicorn”) is a WSGI-compatible server for Python.
 2. **HTTPS**: Use HTTPS to encrypt data in transit.
 3. **Authentication**: CustomUser model with email-based login for added security.
 
+
 ## Summary and Key Takeaways
+
 
 ### Summary
 RoutrProject is a Django-based web application designed to streamline trip management and fuel purchase tracking for truck drivers. The project utilizes multiple modern technologies to enhance functionality, including GPT-4 integration for automatic report generation, deployment on DigitalOcean using Nginx as a reverse proxy, and Gunicorn for managing application requests. The application captures essential trip and fuel data, organizes it efficiently, and delivers user-friendly outputs, such as PDF reports.
+
 
 ### Key Takeaways
 - **Django**: Efficiently manages application logic, routing, and data handling via its MVC architecture.
@@ -167,9 +200,10 @@ RoutrProject is a Django-based web application designed to streamline trip manag
 ---
 
 
+
 # MIT License
 
-## Copyright (c) 2024 [Your Name]
+## Copyright (c) 2024 Brendan Ngwa Nforbi
 
 ### Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
